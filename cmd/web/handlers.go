@@ -63,7 +63,7 @@ func (app *application) postMessage(
 		app.rooms.GetOrCreate(roomName)
 
 	if err != nil {
-		http.Error(w, err.Error(), 500)
+		http.Error(w, err.Error(), 500 )
 		return
 	}
 

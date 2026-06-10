@@ -50,3 +50,20 @@ input[type="text"] {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+.message {
+    background: #f1f1f1;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 10px;
+}
+
+.user {
+    font-weight: bold;
+    color: #0066cc;
+    margin-right: 8px;
+}
+
+.content {
+    color: #088F8F;
+    font-weight: bold;
+}

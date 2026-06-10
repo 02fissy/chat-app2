@@ -64,8 +64,12 @@ async function loadMessages() {
 
 			const div = document.createElement("div");
 
-			div.textContent = `User ${userID}: ${message}`;
+			div.classList.add("message");
 
+            div.innerHTML = `
+            <span class="user">User ${userID}</span>
+            <span class="content">${message}</span>
+        `;
 			chatBox.appendChild(div);
 		});
 
