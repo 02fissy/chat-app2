@@ -18,7 +18,7 @@ type RoomModel struct {
 type RoomModelInterface interface{
 	Insert(name string) error
 	Get(id int) (*Rooms, error)
-	GetByName(name string) (int, error)
+	GetOrCreate(name string) (int, error)
 }
 func (m *RoomModel) Insert(name string) error {
 	stmt := `INSERT INTO rooms (name) VALUES (?)`
@@ -56,15 +56,35 @@ func (m *RoomModel) Get(id int) (*Rooms, error) {
 
 	return r, nil
 }
-func (m *RoomModel) GetByName(name string) (int, error) {
+func (m *RoomModel) GetOrCreate(name string) (int, error) {
+
 	var id int
-	stmt := `SELECT id FROM rooms WHERE name = ?`
-	err := m.DB.QueryRow(stmt, name).Scan(&id)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return 0, ErrNoRecord
-		}
+
+	err := m.DB.QueryRow(
+		"SELECT id FROM rooms WHERE name = ?",
+		name,
+	).Scan(&id)
+
+	if err == nil {
+		return id, nil
+	}
+
+	if err != sql.ErrNoRows {
 		return 0, err
-}
-	return id, nil
+	}
+
+	result, err := m.DB.Exec(
+		"INSERT INTO rooms(name) VALUES(?)",
+		name,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	lastID, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(lastID), nil
 }

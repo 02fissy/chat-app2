@@ -33,7 +33,7 @@ header {
     width: 100%;
     overflow: hidden;
 }
-button[type="submit"] {
+button {
   padding: 10px 20px;
   margin-left: 10px;
   font-size: 16px;
