@@ -19,6 +19,7 @@ type RoomModelInterface interface{
 	Insert(name string) error
 	Get(id int) (*Rooms, error)
 	GetOrCreate(name string) (int, error)
+	GetAll()  ([]Rooms, error)
 }
 func (m *RoomModel) Insert(name string) error {
 	stmt := `INSERT INTO rooms (name) VALUES (?)`
@@ -87,4 +88,38 @@ func (m *RoomModel) GetOrCreate(name string) (int, error) {
 	}
 
 	return int(lastID), nil
+}
+func (m *RoomModel) GetAll() ([]Rooms, error) {
+
+	stmt := `
+		SELECT id, name
+		FROM rooms
+		ORDER BY name
+	`
+
+	rows, err := m.DB.Query(stmt)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var rooms []Rooms
+
+	for rows.Next() {
+
+		var room Rooms
+
+		err := rows.Scan(
+			&room.ID,
+			&room.Name,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		rooms = append(rooms, room)
+	}
+
+	return rooms, nil
 }

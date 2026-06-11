@@ -44,7 +44,9 @@ func normalize(baseDir, ext string, files ...string) []string {
 
 func newTemplateCache() (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
-	cache["room.html"] = mustParseTemplates("pages/room")
+	cache["chat.html"] = mustParseTemplates("pages/chat")
+	cache["rooms.html"] = mustParseTemplates("pages/rooms")
+
 
 	return cache, nil
 }

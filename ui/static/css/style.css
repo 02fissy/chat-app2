@@ -4,7 +4,6 @@ html {
 
 body {
   font-family: Arial, sans-serif;
-  background-color: rgb(221, 231, 241);
   margin: 0;
   padding: 0;
 }
@@ -66,4 +65,32 @@ input[type="text"] {
 .content {
     color: #088F8F;
     font-weight: bold;
+}
+.rooms-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.rooms-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: rgb(4, 4, 143);
+}
+
+.room-card {
+    display: block;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 500;
+    color: #088F8F;
+    background: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.room-card:hover {
+    background-color: rgb(221, 231, 241);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }

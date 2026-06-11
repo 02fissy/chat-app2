@@ -14,7 +14,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request){
 		Room: room,
 	}
 
-	app.render(w, r, http.StatusOK, "room.html", data)
+	app.render(w, r, http.StatusOK, "chat.html", data)
 }
 func (app *application) getMessages(
 	w http.ResponseWriter,
@@ -96,4 +96,23 @@ func (app *application) postMessage(
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+func (app *application) roomList(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+
+	rooms, err := app.rooms.GetAll()
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	app.render(
+		w,
+		r,
+		http.StatusOK,
+		"rooms.html",
+		rooms,
+	)
 }
