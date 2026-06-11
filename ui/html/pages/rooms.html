@@ -11,11 +11,12 @@
             <h1>Available Rooms</h1>
             
         {{range .}}
-        <div>
               <a href="/{{.Name}}" class="room-card">
-                {{.Name}}
-            </a>  
-        </div> 
+                    <div class="room-name">{{.Name}}</div>
+                    <div class="room-time">
+                        Created: {{.CreatedAt.Format "02 Jan 2006 15:04"}}
+                    </div>
+                </a>  
         {{end}}
     </div>
         

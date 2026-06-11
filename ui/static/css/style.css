@@ -78,10 +78,10 @@ input[type="text"] {
 }
 
 .room-card {
-    display: block;
+    display: flex;
+    justify-content: space-between;
     text-decoration: none;
     font-size: 24px;
-    font-weight: 500;
     color: #088F8F;
     background: white;
     padding: 20px;
@@ -93,4 +93,8 @@ input[type="text"] {
 .room-card:hover {
     background-color: rgb(221, 231, 241);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+.room-time{
+  font-size: 18px;
+  color: #0066cc;
 }

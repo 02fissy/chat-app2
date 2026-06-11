@@ -92,9 +92,9 @@ func (m *RoomModel) GetOrCreate(name string) (int, error) {
 func (m *RoomModel) GetAll() ([]Rooms, error) {
 
 	stmt := `
-		SELECT id, name
+		SELECT id, name, created_at
 		FROM rooms
-		ORDER BY name
+		ORDER BY created_at DESC
 	`
 
 	rows, err := m.DB.Query(stmt)
@@ -112,6 +112,7 @@ func (m *RoomModel) GetAll() ([]Rooms, error) {
 		err := rows.Scan(
 			&room.ID,
 			&room.Name,
+			&room.CreatedAt,
 		)
 
 		if err != nil {
