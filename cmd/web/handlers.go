@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strconv"
+	"strings"
 	"errors"
 	"chatapp.new.net/internal/validators"
 	"chatapp.new.net/internal/models"
@@ -57,8 +57,8 @@ func (app *application) getMessages(
 
 		fmt.Fprintf(
 			w,
-			"%d|%s\n",
-			msg.UserID,
+			"%s|%s\n",
+			msg.Username,
 			msg.Content,
 		)
 	}
@@ -67,42 +67,58 @@ func (app *application) postMessage(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
+	fmt.Println("POST MESSAGE HIT")
 
 	roomName := r.PathValue("room")
-	
-	roomID, err :=
-		app.rooms.GetOrCreate(roomName)
 
+	roomID, err := app.rooms.GetOrCreate(roomName)
 	if err != nil {
-		http.Error(w, err.Error(), 500 )
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	sessionValue := app.sessionManager.Get(
+		r.Context(),
+		"authenticatedUserID",
+	)
+
+	userID64, ok := sessionValue.(int64)
+	if !ok {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	userID, err :=
-		strconv.Atoi(
-			r.PathValue("userID"),
-		)
-
-	if err != nil {
-		http.Error(w, "invalid user", 400)
-		return
-	}
+	userID := int(userID64)
 
 	err = r.ParseForm()
 	if err != nil {
-		http.Error(w, err.Error(), 400)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	content := r.FormValue("message")
+
+	content := strings.TrimSpace(
+		r.FormValue("message"),
+	)
+
+	if content == "" {
+		http.Error(
+			w,
+			"message cannot be empty",
+			http.StatusBadRequest,
+		)
+		return
+	}
 
 	err = app.messages.Insert(
 		roomID,
 		userID,
 		content,
 	)
-
 	if err != nil {
-		http.Error(w, err.Error(), 500)
+		http.Error(
+			w,
+			err.Error(),
+			http.StatusInternalServerError,
+		)
 		return
 	}
 

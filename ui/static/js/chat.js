@@ -1,10 +1,3 @@
-let user = sessionStorage.getItem("userID");
-
-if (!user) {
-	user = Math.floor(Math.random() * 100000);
-	sessionStorage.setItem("userID", user);
-}
-
 const chatBox = document.getElementById("chatBox");
 const form = document.getElementById("form");
 const msg = document.getElementById("msg");
@@ -18,7 +11,7 @@ form.addEventListener("submit", async (e) => {
 
 	try {
 		const response = await fetch(
-			`/messages/${room}/users/${user}`,
+			`/messages/${room}`,
 			{
 				method: "POST",
 				headers: {
@@ -43,38 +36,36 @@ form.addEventListener("submit", async (e) => {
 });
 
 async function loadMessages() {
-
 	try {
 		const res = await fetch(`/messages/${room}`);
-
 		const text = await res.text();
 
 		chatBox.innerHTML = "";
 
 		text.trim().split("\n").forEach(line => {
-
 			if (!line) return;
 
 			const parts = line.split("|");
 
 			if (parts.length !== 2) return;
 
-			const userID = parts[0];
-			const message = parts[1];
+			const username = parts[0];
+			const message = parts.slice(1).join("|"); 
 
 			const div = document.createElement("div");
-
 			div.classList.add("message");
 
-            div.innerHTML = `
-            <span class="user">User ${userID}</span>
-            <span class="content">${message}</span>
-        `;
+			div.innerHTML = `
+				<span class="user">${username}</span>
+				<span class="content">${message}</span>
+			`;
+
 			chatBox.appendChild(div);
 		});
+		chatBox.scrollTop = chatBox.scrollHeight;
 
 	} catch (err) {
-		console.error(err);
+		console.error("Error loading messages:", err);
 	}
 }
 

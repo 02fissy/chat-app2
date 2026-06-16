@@ -12,7 +12,7 @@ func (app *application) routes() http.Handler{
 	mux.HandleFunc("GET /rooms", app.roomList)
 	mux.HandleFunc("GET /{room}", app.room)
 	mux.HandleFunc("GET /messages/{room}", app.getMessages)
-	mux.HandleFunc("POST /messages/{room}/users/{userID}", app.postMessage)
+	mux.HandleFunc("POST /messages/{room}", app.postMessage)
 	mux.HandleFunc("GET /user/signup",app.userSignup)
 	mux.HandleFunc("POST /user/signup",app.userSignupPost)
 	mux.HandleFunc("GET /user/login",app.userLogin)

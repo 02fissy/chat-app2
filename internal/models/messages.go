@@ -8,6 +8,7 @@ import (
 type Messages struct{
 	ID int
 	UserID int
+	Username string
 	Content string
 	CreatedAt time.Time
 	RoomID int
@@ -32,7 +33,18 @@ func (m *MessageModel) Insert(roomID, userID int, content string) error {
 	return nil
 }
 func (m *MessageModel) GetByRoomID(roomID int) ([]Messages, error) {
-	stmt := `SELECT user_id, content FROM messages WHERE room_id = ? ORDER BY id`
+
+	stmt := `
+		SELECT
+			m.user_id,
+			u.username,
+			m.content
+		FROM messages m
+		JOIN users u ON u.user_id = m.user_id
+		WHERE m.room_id = ?
+		ORDER BY m.id ASC
+	`
+
 	rows, err := m.DB.Query(stmt, roomID)
 	if err != nil {
 		return nil, err
@@ -40,12 +52,25 @@ func (m *MessageModel) GetByRoomID(roomID int) ([]Messages, error) {
 	defer rows.Close()
 
 	var messages []Messages
+
 	for rows.Next() {
 		var msg Messages
-		if err := rows.Scan(&msg.UserID, &msg.Content); err != nil {
+
+		err := rows.Scan(
+			&msg.UserID,
+			&msg.Username,
+			&msg.Content,
+		)
+		if err != nil {
 			return nil, err
 		}
+
 		messages = append(messages, msg)
 	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return messages, nil
 }
