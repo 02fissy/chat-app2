@@ -98,3 +98,97 @@ input[type="text"] {
   font-size: 18px;
   color: #0066cc;
 }
+.main-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+}
+.main-container h1{
+  font-size: 36px;
+  color: rgb(4, 4, 143);
+}
+.main-container p{
+    margin-top: 0;
+    color: #088F8F;
+    font-size: 16px;
+  }
+.main-container a{
+  text-decoration: none;
+  color: rgb(9, 9, 250);
+  font-size: 18px;
+}
+form{
+  width: 500px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  gap: 15px;
+}
+form h3{
+  color: rgb(4, 4, 143);
+  font-size: 28px;
+}
+form div{
+  display: flex;
+  flex-direction: column;
+
+}
+form div label{
+  font-size: 16px;
+  color: #555;
+}
+.main-body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.auth{
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.auth input{
+  width: 80%;
+  padding: 10px 20px;
+}
+.error {
+    color: #C0392B;
+    font-weight: bold;
+    display: block;
+}
+.error + input {
+    border-color: #C0392B !important;
+    border-width: 2px !important;
+}
+div.flash {
+    color: #FFFFFF;
+    font-weight: bold;
+    background-color: #34495E;
+    padding: 18px;
+    margin-bottom: 36px;
+    text-align: center;
+}
+div.error {
+    color: #FFFFFF;
+    background-color: #C0392B;
+    padding: 18px;
+    margin-bottom: 36px;
+    font-weight: bold;
+    text-align: center;
+}
+input[type="submit"] {
+  padding: 10px 20px;
+  margin-left: 10px;
+  font-size: 16px;
+  background-color: rgb(0, 8, 240);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

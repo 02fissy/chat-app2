@@ -8,6 +8,10 @@ import(
 	"bytes"
 	"net/http"
 )
+type templateData struct {
+	Flash string
+	Form any
+}
 const tplDir = "html"
 const tplExt = ".html"
 
@@ -44,8 +48,11 @@ func normalize(baseDir, ext string, files ...string) []string {
 
 func newTemplateCache() (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
+	cache["home.html"] = mustParseTemplates("pages/home")
 	cache["chat.html"] = mustParseTemplates("pages/chat")
 	cache["rooms.html"] = mustParseTemplates("pages/rooms")
+	cache["signup.html"] = mustParseTemplates("pages/signup")
+	cache["login.html"] = mustParseTemplates("pages/login")
 
 
 	return cache, nil

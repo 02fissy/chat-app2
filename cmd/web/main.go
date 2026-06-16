@@ -5,12 +5,16 @@ import (
 	"flag"
 	"log/slog"
 	"net/http"
+	"time"
 	"os"
 	"html/template"
 
 	"chatapp.new.net/internal/database"
 	"chatapp.new.net/internal/models"
+	"github.com/alexedwards/scs/sqlite3store"
+	"github.com/alexedwards/scs/v2"
 	"github.com/pressly/goose/v3"
+	"github.com/go-playground/form/v4" 
 	_ "modernc.org/sqlite"
 )
 
@@ -20,6 +24,8 @@ type application struct{
 	rooms models.RoomModelInterface
 	messages models.MessageModelInterface
 	templateCache map[string]*template.Template
+	sessionManager *scs.SessionManager
+	formDecoder *form.Decoder
 
 }
 func main(){
@@ -39,12 +45,20 @@ func main(){
          logger.Error(err.Error())
          os.Exit(1)
      }
+	
+	sessionManager := scs.New()
+	sessionManager.Store = sqlite3store.New(db)
+	sessionManager.Lifetime = 12 * time.Hour
+
+	formDecoder := form.NewDecoder()
 	app :=&application{
 		logger: logger,
 		users: &models.UserModel{DB: db},
 		rooms: &models.RoomModel{DB: db},
 		messages: &models.MessageModel{DB: db},
 		templateCache: templateCache,
+		sessionManager: sessionManager,
+		formDecoder: formDecoder,
 	}
 	logger.Info("starting server", "addr", *addr)
 
